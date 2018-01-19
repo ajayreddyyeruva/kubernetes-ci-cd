@@ -14,6 +14,7 @@ node {
 
     stage "Build"
     
+        sh "/usr/local/bin/docker login -u mindstreamorg -p mindstreamorg123!"
         sh "/usr/local/bin/docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
     
     stage "Push"
