@@ -82,12 +82,6 @@ module.exports = function(Crossword) {
     });
   }
 
-#  function fireHit() {
-#    var podId = process.env.HOSTNAME;
-#    var url = "http://monitor-scale:3001/hit/" + podId;
-#    request(url);
-#  }
-
   function handleError(msg, cb, status) {
     var error = new Error(msg);
     error.status = status | 500;
