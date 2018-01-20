@@ -8,19 +8,19 @@ node {
 
     tag = readFile('commit-id').replace("\n", "").replace("\r", "")
     appName = "monitor-scale"
-    registryHost = "127.0.0.1:30400/"
+    registryHost = "mindstreamorg/"
     imageName = "${registryHost}${appName}:${tag}"
     env.BUILDIMG=imageName
 
     stage "Build"
     
-        sh "docker build -t ${imageName} applications/monitor-scale"
+        sh "/usr/local/bin/docker build -t ${imageName} applications/monitor-scale"
     
     stage "Push"
 
-        sh "docker push ${imageName}"
+        sh "/usr/local/bin/docker push ${imageName}"
 
     stage "Deploy"
 
-        sh "sed 's#127.0.0.1:30400/monitor-scale:latest#'$BUILDIMG'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -"
+        sh "sed 's#mindstreamorg/monitor-scale:latest#'$BUILDIMG'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -"
 }
