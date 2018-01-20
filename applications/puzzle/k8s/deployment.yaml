@@ -14,7 +14,7 @@ spec:
         tier: puzzle
     spec:
       containers:
-      - image: 127.0.0.1:30400/puzzle:latest
+      - image: mindstreamorg/puzzle:latest
         name: puzzle
         imagePullPolicy: Always
         lifecycle:
