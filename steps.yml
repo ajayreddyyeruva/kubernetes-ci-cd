@@ -35,16 +35,10 @@ parts:
         com: nano applications/hello-kenzan/index.html
 
       - cap: Now let’s build an image, giving it a special name that points to our local cluster registry.
-        com: docker build -t 127.0.0.1:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
-
-      - cap: We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a container that listens on 127.0.0.1:30400 and forwards to our cluster.
-        com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REGIP=`minikube ip`" --name socat-registry -p 30400:5000 chadmoon/socat:latest bash -c "socat TCP4-LISTEN:5000,fork,reuseaddr TCP4:`minikube ip`:30400"
+        com: docker build -t mindstreamorg/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
 
       - cap: With our proxy container up and running, we can now push our image to the local repository.
-        com: docker push 127.0.0.1:30400/hello-kenzan:latest
-
-      - cap: The proxy’s work is done, so you can go ahead and stop it.
-        com: docker stop socat-registry;
+        com: docker push mindstreamorg/hello-kenzan:latest
 
       - cap: With the image in our cluster registry, the last thing to do is apply the manifest to create and deploy the hello-kenzan pod based on the image.
         com: kubectl apply -f applications/hello-kenzan/k8s/deployment.yaml
@@ -106,22 +100,16 @@ parts:
         com: kubectl apply -f manifests/all-services.yml
       
       - cap: Now we're going to walk through an initial build of the monitor-scale service.
-        com: docker build -t 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale
-
-      - cap: Set up a proxy so we can push the monitor-scale Docker image we just built to our cluster's registry.
-        com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REGIP=`minikube ip`" --name socat-registry -p 30400:5000 chadmoon/socat:latest bash -c "socat TCP4-LISTEN:5000,fork,reuseaddr TCP4:`minikube ip`:30400"
+        com: docker build -t mindstreamorg/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale
 
       - cap: Push the monitor-scale image to the registry.
-        com: docker push 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD`
-
-      - cap: The proxy’s work is done, so go ahead and stop it.
-        com: docker stop socat-registry
+        com: docker push mindstreamorg/monitor-scale:`git rev-parse --short HEAD`
       
       - cap: Open the registry UI and verify that the monitor-scale image is in our local registry.
         com: minikube service registry-ui
 
       - cap: Create the monitor-scale deployment and service. 
-        com: sed 's#127.0.0.1:30400/monitor-scale:latest#127.0.0.1:30400/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -
+        com: sed 's#mindstreamorg/monitor-scale:latest#mindstreamorg/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -
       
       - cap: Wait for the monitor-scale deployment to finish.
         com: kubectl rollout status deployment/monitor-scale
