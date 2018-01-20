@@ -35,16 +35,10 @@ parts:
         com: echo ''
 
       - cap: Now let’s build an image, giving it a special name that points to our local cluster registry.
-        com: docker build -t 127.0.0.1:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
-
-      - cap: We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a container that listens on 127.0.0.1:30400 and forwards to our cluster.
-        com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REGIP=`minikube ip`" --name socat-registry -p 30400:5000 chadmoon/socat:latest bash -c "socat TCP4-LISTEN:5000,fork,reuseaddr TCP4:`minikube ip`:30400"
+        com: docker build -t mindstreamorg/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
 
       - cap: With our proxy container up and running, we can now push our image to the local repository.
-        com: docker push 127.0.0.1:30400/hello-kenzan:latest
-
-      - cap: The proxy’s work is done, so you can go ahead and stop it.
-        com: docker stop socat-registry;
+        com: docker push mindstreamorg/hello-kenzan:latest
 
       - cap: With the image in our cluster registry, the last thing to do is apply the manifest to create and deploy the hello-kenzan pod based on the image.
         com: kubectl apply -f applications/hello-kenzan/k8s/deployment.yaml
