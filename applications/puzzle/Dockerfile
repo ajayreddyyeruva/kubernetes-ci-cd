@@ -11,8 +11,11 @@ RUN yarn --pure-lockfile
 # Bundle app source
 COPY . /usr/src/app
 
-COPY up.sh /up.sh
-COPY down.sh /down.sh
+#COPY up.sh /up.sh
+#COPY down.sh /down.sh
+
+#EXPOSE 3000
+#CMD [ "node", "." ]
 
 EXPOSE 3000
-CMD [ "node", "." ]
+CMD [ "npm", "run", "start" ]
