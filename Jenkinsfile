@@ -24,4 +24,5 @@ node {
 
         sh "sed 's#mindstreamorg/hello-kenzan:latest#'$BUILDIMG'#' applications/hello-kenzan/k8s/deployment.yaml | /usr/local/bin/kubectl apply -f -"
         sh "/usr/local/bin/kubectl rollout status deployment/hello-kenzan"
+    
 }
