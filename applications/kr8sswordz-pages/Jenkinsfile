@@ -14,13 +14,13 @@ node {
 
     stage "Build"
     
-        sh "docker build -t ${imageName} applications/kr8sswordz-pages"
+        sh "/usr/local/bin/docker build -t ${imageName} applications/kr8sswordz-pages"
     
     stage "Push"
 
-        sh "docker push ${imageName}"
+        sh "/usr/local/bin/docker push ${imageName}"
 
     stage "Deploy"
 
-        sh "sed 's#mindstreamorg/kr8sswordz:latest#'$BUILDIMG'#' applications/kr8sswordz-pages/k8s/deployment.yaml | kubectl apply -f -"
+        sh "sed 's#mindstreamorg/kr8sswordz:latest#'$BUILDIMG'#' applications/kr8sswordz-pages/k8s/deployment.yaml | /usr/local/bin/kubectl apply -f -"
 }
