@@ -22,5 +22,5 @@ node {
 
     stage "Deploy"
 
-        sh "sed 's#mindstreamorg/monitor-scale:latest#'$BUILDIMG'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -"
+        sh "sed 's#mindstreamorg/monitor-scale:latest#'$BUILDIMG'#' applications/monitor-scale/k8s/deployment.yaml | /usr/local/bin/kubectl apply -f -"
 }
