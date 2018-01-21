@@ -14,6 +14,6 @@ COPY . /usr/src/app
 COPY up.sh /up.sh
 COPY down.sh /down.sh
 
-EXPOSE 3000
+EXPOSE 3000 27017
 CMD [ "node", "." ]
 
