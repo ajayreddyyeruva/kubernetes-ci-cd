@@ -14,7 +14,7 @@ node {
 
     stage "Build"
     
-        sh "/usr/local/bin/docker build -t ${imageName} part1/hello-kenzan"
+        sh "/usr/local/bin/docker build -t ${imageName} applications/hello-kenzan"
     
     stage "Push"
 
